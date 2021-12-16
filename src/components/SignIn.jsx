@@ -2,6 +2,7 @@ import React from "react";
 import { TextInput, Pressable, View, StyleSheet } from "react-native";
 import Text from "./Text";
 import { Formik, useField } from "formik";
+import * as yup from "yup";
 const styles = StyleSheet.create({
   container: {
     padding: 20,
@@ -22,32 +23,58 @@ const styles = StyleSheet.create({
     backgroundColor: "#0366d6",
     borderRadius: 5,
   },
-  buttonText:{
+  buttonText: {
     color: "white",
     fontSize: 20,
-    fontWeight: "bold",    
-  }
+    fontWeight: "bold",
+  },
+  required: {
+    color: "red",
+  },
 });
 const initialValues = {
-  username: "",
-  password: "",
+  Username: "",
+  Password: "",
+};
+const validationSchema = yup.object().shape({
+  Username: yup.string().required(),
+  Password: yup.string().required(),
+});
+const FormikTextInput = ({ name, ...props }) => {
+  const [field, meta, helpers] = useField(name);
+  const showError = meta.touched && meta.error;
+  return (
+    <>
+      <TextInput
+        onChangeText={(value) => helpers.setValue(value)}
+        onBlur={() => helpers.setTouched(true)}
+        value={field.value}
+        style={styles.input}
+        {...props}
+      />
+      {showError && <Text style={styles.required}>{meta.error}</Text>}
+    </>
+  );
 };
 const SignInForm = ({ onSubmit }) => {
-  const [username, usernameMeta, setUsername] = useField("username");
-  const [password, passwordMeta, setPassword] = useField("password");
+  const [username, usernameMeta, setUsername] = useField("Username");
+  const [password, passwordMeta, setPassword] = useField("Password");
   return (
     <View style={styles.container}>
-      <TextInput
+      <FormikTextInput
         style={styles.input}
         placeholder="Username"
         value={username.value}
         onChangeText={(text) => setUsername.setValue(text)}
+        name="Username"
       />
-      <TextInput
+      <FormikTextInput
         style={styles.input}
+        secureTextEntry={true}
         placeholder="Password"
         value={password.value}
         onChangeText={(text) => setPassword.setValue(text)}
+        name="Password"
       />
       <Pressable onPress={onSubmit} style={styles.button}>
         <Text style={styles.buttonText}>Sign In</Text>
@@ -60,7 +87,11 @@ const SignIn = () => {
     console.log(values);
   };
   return (
-    <Formik initialValues={initialValues} onSubmit={onSubmit}>
+    <Formik
+      initialValues={initialValues}
+      onSubmit={onSubmit}
+      validationSchema={validationSchema}
+    >
       {({ handleSubmit }) => <SignInForm onSubmit={handleSubmit} />}
     </Formik>
   );
