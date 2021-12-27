@@ -11,9 +11,11 @@
     "lint": "eslint ./src/**/*.{js,jsx} App.js --no-error-on-unmatched-pattern"
   },
   "dependencies": {
+    "@apollo/client": "^3.5.6",
     "expo": "~42.0.1",
     "expo-status-bar": "~1.0.4",
     "formik": "^2.2.9",
+    "graphql": "^16.2.0",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-native": "https://github.com/expo/react-native/archive/sdk-42.0.0.tar.gz",
