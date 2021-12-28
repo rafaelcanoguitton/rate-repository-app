@@ -3,6 +3,7 @@ import { TextInput, Pressable, View, StyleSheet } from "react-native";
 import Text from "./Text";
 import { Formik, useField } from "formik";
 import * as yup from "yup";
+import useSignIn from "../hooks/useSignIn";
 const styles = StyleSheet.create({
   container: {
     padding: 20,
@@ -83,8 +84,18 @@ const SignInForm = ({ onSubmit }) => {
   );
 };
 const SignIn = () => {
-  const onSubmit = (values) => {
-    console.log(values);
+  const [signIn] = useSignIn();
+  const onSubmit = async (values) => {
+    console.log("Values: ", values);
+    try {
+      const { Username, Password } = values;
+      console.log("Username: ", Username);
+      console.log("Password: ", Password);
+      const { data } = await signIn({ username: Username, password: Password });
+      console.log("Data: ", data.authorize.accessToken);
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <Formik

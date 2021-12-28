@@ -1,4 +1,3 @@
-//in this file we define the gql queries that we will use in our application
 import { gql } from "@apollo/client";
 
 const GET_REPOSITORIES = gql`
