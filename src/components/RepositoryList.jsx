@@ -15,11 +15,10 @@ const RepositoryList = () => {
   const repositoryNodes = repositories
     ? repositories.edges.map((edge) => edge.node)
     : [];
-  console.log(repositoryNodes);
   const renderItem = ({ item }) => <RepositoryItem item={item} />;
   return (
     <FlatList
-      data={repositoryNodes} // <- Here's what I need to change
+      data={repositoryNodes}
       ItemSeparatorComponent={ItemSeparator}
       renderItem={renderItem}
       keyExtractor={(item) => item.id}

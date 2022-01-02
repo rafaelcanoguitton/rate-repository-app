@@ -91,10 +91,7 @@ const SignIn = () => {
     console.log("Values: ", values);
     try {
       const { Username, Password } = values;
-      console.log("Username: ", Username);
-      console.log("Password: ", Password);
       const { data } = await signIn({ username: Username, password: Password });
-      console.log("Data: ", data.authorize.accessToken);
       history.push("/");
     } catch (error) {
       console.log(error);
