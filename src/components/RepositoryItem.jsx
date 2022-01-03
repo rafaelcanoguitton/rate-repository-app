@@ -1,16 +1,17 @@
 import React from "react";
-import { Image, View } from "react-native";
+import { Image, Pressable, View } from "react-native";
 import { StyleSheet } from "react-native";
 import Text from "./Text";
+import { useHistory } from "react-router-native";
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: "column",
-    
+
     padding: 10,
     borderBottomWidth: 1,
     borderColor: "#eee",
-    justifyContent:"flex-start"
+    justifyContent: "flex-start",
   },
   statStack: {
     flexDirection: "column",
@@ -63,38 +64,52 @@ const styles = StyleSheet.create({
     padding: 10,
   },
 });
-const statStack = ({ stat, label }) => {
+export const statStack = ({ stat, label }) => {
   if (stat > 1000) {
     stat = Math.round(stat / 1000) + "k";
   }
   return (
     <View style={styles.statStack}>
-      <Text style={styles.statCount} testID={label}>{stat}</Text>
+      <Text style={styles.statCount} testID={label}>
+        {stat}
+      </Text>
       <Text style={styles.statLabel}>{label}</Text>
     </View>
   );
 };
 const RepositoryItem = ({ item }) => {
+  const history = useHistory();
+  const goToRepo = () => {
+    history.push(`/repository/${item.id}`);
+  };
   return (
-    <View style={styles.container}>
-      <View style={styles.upContainer}>
-        <Image
-          source={{ uri: item.ownerAvatarUrl }}
-          style={{ width: 45  , height: 45 }}
-        />
-        <View style={styles.infoContainer}>
-          <Text style={styles.title} testID='fullName'>{item.fullName} </Text>
-          <Text style={styles.description}testID='description'>{item.description}</Text>
-          <Text style={styles.language}testID='language'>{item.language}</Text>
+    <Pressable onPress={goToRepo}>
+      <View style={styles.container}>
+        <View style={styles.upContainer}>
+          <Image
+            source={{ uri: item.ownerAvatarUrl }}
+            style={{ width: 45, height: 45 }}
+          />
+          <View style={styles.infoContainer}>
+            <Text style={styles.title} testID="fullName">
+              {item.fullName}{" "}
+            </Text>
+            <Text style={styles.description} testID="description">
+              {item.description}
+            </Text>
+            <Text style={styles.language} testID="language">
+              {item.language}
+            </Text>
+          </View>
+        </View>
+        <View style={styles.stats}>
+          {statStack({ stat: item.stargazersCount, label: "Stars" })}
+          {statStack({ stat: item.forksCount, label: "Forks" })}
+          {statStack({ stat: item.reviewCount, label: "Reviews" })}
+          {statStack({ stat: item.ratingAverage, label: "Rating" })}
         </View>
       </View>
-      <View style={styles.stats}>
-        {statStack({ stat: item.stargazersCount, label: "Stars"})}
-        {statStack({ stat: item.forksCount, label: "Forks" })}
-        {statStack({ stat: item.reviewCount, label: "Reviews" })}
-        {statStack({ stat: item.ratingAverage, label: "Rating" })}
-      </View>
-    </View>
+    </Pressable>
   );
 };
 export default RepositoryItem;
