@@ -69,7 +69,7 @@ const statStack = ({ stat, label }) => {
   }
   return (
     <View style={styles.statStack}>
-      <Text style={styles.statCount}>{stat}</Text>
+      <Text style={styles.statCount} testID={label}>{stat}</Text>
       <Text style={styles.statLabel}>{label}</Text>
     </View>
   );
@@ -83,13 +83,13 @@ const RepositoryItem = ({ item }) => {
           style={{ width: 45  , height: 45 }}
         />
         <View style={styles.infoContainer}>
-          <Text style={styles.title}>{item.fullName}</Text>
-          <Text style={styles.description}>{item.description}</Text>
-          <Text style={styles.language}>{item.language}</Text>
+          <Text style={styles.title} testID='fullName'>{item.fullName} </Text>
+          <Text style={styles.description}testID='description'>{item.description}</Text>
+          <Text style={styles.language}testID='language'>{item.language}</Text>
         </View>
       </View>
       <View style={styles.stats}>
-        {statStack({ stat: item.stargazersCount, label: "Stars" })}
+        {statStack({ stat: item.stargazersCount, label: "Stars"})}
         {statStack({ stat: item.forksCount, label: "Forks" })}
         {statStack({ stat: item.reviewCount, label: "Reviews" })}
         {statStack({ stat: item.ratingAverage, label: "Rating" })}
