@@ -40,6 +40,20 @@ export const GET_REPO = gql`
       forksCount
       reviewCount
       ratingAverage
+      reviews {
+        edges {
+          node {
+            id
+            text
+            rating
+            createdAt
+            user {
+              id
+              username
+            }
+          }
+        }
+      }
     }
   }
 `;

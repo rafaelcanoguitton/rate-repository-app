@@ -1,12 +1,29 @@
 import React from "react";
-import { Image, View, StyleSheet, Linking, Pressable } from "react-native";
+import {
+  Image,
+  View,
+  StyleSheet,
+  Linking,
+  Pressable,
+  FlatList,
+} from "react-native";
 import Text from "./Text";
 import { useParams } from "react-router-native";
 import useRepository from "../hooks/useRepository";
 import { statStack } from "./RepositoryItem";
+import { ItemSeparator } from "./RepositoryList";
 const styles = StyleSheet.create({
+  repoInfo: {
+    margin: 10,
+  },
   container: {
-    height: '30%',
+    backgroundColor: "white",
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 10,
+    margin: 10,
+    width: "100%",
+    borderRadius: 10,
   },
   statStack: {
     flexDirection: "column",
@@ -66,25 +83,38 @@ const styles = StyleSheet.create({
     backgroundColor: "#0366d6",
     padding: 5,
     borderRadius: 5,
+    margin: 10,
   },
-
+  ratingCircle: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    alignItems: "center",
+    justifyContent: "center",
+    borderColor: "#0366d6",
+    borderWidth: 2,
+    //position in the upper left corner
+    
+    top: -40,
+    left: -5,
+  },
+  date: {
+    fontSize: 12,
+    color: "#999",
+  },
+  review: {
+    fontSize: 12,
+    color: "black",
+    marginBottom: 5,
+  },
 });
-const Repository = () => {
-  console.log("awa");
-  const { id } = useParams();
-  const { repository } = useRepository({ id: id });
+const RepositoryItem = ({ repository }) => {
   const openLink = () => {
+    console.log(repository.url);
     Linking.openURL(repository.url);
   };
-  if (!repository) {
-    return (
-      <View>
-        <Text>Loading...</Text>
-      </View>
-    );
-  }
   return (
-    <View style={styles.container}>
+    <View style={styles.repoInfo}>
       <View style={styles.upContainer}>
         <Image
           source={{ uri: repository.ownerAvatarUrl }}
@@ -109,11 +139,58 @@ const Repository = () => {
         {statStack({ stat: repository.ratingAverage, label: "Rating" })}
       </View>
       <View style={styles.openButton}>
-      <Pressable onPress={openLink}>
-        <Text style={styles.title}>Open in browser</Text>
-      </Pressable>
+        <Pressable onPress={openLink}>
+          <Text
+            style={{
+              fontSize: 16,
+              fontWeight: "bold",
+              color: "white",
+              textAlign: "center",
+            }}
+          >
+            Open in browser
+          </Text>
+        </Pressable>
       </View>
     </View>
+  );
+};
+const ReviewItem = ({ review }) => {
+  //display user, rating, date and comment
+  return (
+    <View style={styles.container}>
+      <View style={styles.ratingCircle}>
+        <Text>{review.rating}</Text>
+      </View>
+      <View style={styles.infoContainer}>
+        <Text style={styles.title}>{review.user.username}</Text>
+        <Text style={styles.date}>{review.createdAt}</Text>
+        <Text style={styles.review}>{review.text}</Text>
+      </View>
+    </View>
+  );
+};
+const Repository = () => {
+  const { id } = useParams();
+  const { repository } = useRepository({ id: id });
+  if (!repository) {
+    return (
+      <View>
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
+  const reviews = repository
+    ? repository.reviews.edges.map((edge) => edge.node)
+    : [];
+  return (
+    <FlatList
+      data={reviews}
+      renderItem={({ item }) => <ReviewItem review={item} />}
+      keyExtractor={(item) => item.id}
+      ListHeaderComponent={() => <RepositoryItem repository={repository} />}
+      ItemSeparatorComponent={() => <ItemSeparator />}
+    />
   );
 };
 export default Repository;
