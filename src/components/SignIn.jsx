@@ -86,7 +86,7 @@ const SignInForm = ({ onSubmit }) => {
     </View>
   );
 };
-export const SignInContainer = ({onSubmit}) => {
+export const SignInContainer = ({ onSubmit }) => {
   return (
     <Formik
       initialValues={initialValues}

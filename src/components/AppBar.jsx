@@ -46,6 +46,11 @@ const AppBar = () => {
             <Text style={styles.text}>Sign Out</Text>
           </Pressable>
         )}
+        <Pressable>
+          <Link to="/review">
+            <Text style={styles.text}>Review</Text>
+          </Link>
+        </Pressable>
       </ScrollView>
     </View>
   );

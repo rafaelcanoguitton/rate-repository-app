@@ -9,6 +9,9 @@ const useRepository = ({ id }) => {
   if (error) {
     return [];
   }
+  console.log(loading);
+  console.log(error);
+  console.log(data);
   return data;
 };
 
