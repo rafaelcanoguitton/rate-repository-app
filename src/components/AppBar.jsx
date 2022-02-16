@@ -30,27 +30,36 @@ const AppBar = () => {
   return (
     <View style={styles.container}>
       <ScrollView horizontal={true}>
-        <Pressable>
+      <Pressable>
           <Link to="/">
             <Text style={styles.text}>Repositories</Text>
           </Link>
         </Pressable>
         {(!data?.authorizedUser && (
-          <Pressable>
-            <Link to="/sign-in">
-              <Text style={styles.text}>Sign In</Text>
-            </Link>
-          </Pressable>
+          <>
+            <Pressable>
+              <Link to="/sign-in">
+                <Text style={styles.text}>Sign In</Text>
+              </Link>
+            </Pressable>
+            <Pressable>
+              <Link to="/sign-up">
+                <Text style={styles.text}>Sign Up</Text>
+              </Link>
+            </Pressable>
+          </>
         )) || (
-          <Pressable onPress={SignOut}>
-            <Text style={styles.text}>Sign Out</Text>
-          </Pressable>
+          <>
+            <Pressable onPress={SignOut}>
+              <Text style={styles.text}>Sign Out</Text>
+            </Pressable>
+            <Pressable>
+              <Link to="/review">
+                <Text style={styles.text}>Review</Text>
+              </Link>
+            </Pressable>
+          </>
         )}
-        <Pressable>
-          <Link to="/review">
-            <Text style={styles.text}>Review</Text>
-          </Link>
-        </Pressable>
       </ScrollView>
     </View>
   );

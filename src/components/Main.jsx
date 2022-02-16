@@ -4,6 +4,7 @@ import AppBar from "./AppBar";
 import RepositoryList from "./RepositoryList";
 import Repository from "./Repository";
 import SignIn from "./SignIn";
+import SignUp from "./SignUp";
 import { Route, Switch, Redirect } from "react-router-native";
 import Review from "./Review";
 const styles = StyleSheet.create({
@@ -23,6 +24,9 @@ const Main = () => {
         </Route>
         <Route path="/sign-in">
           <SignIn />
+        </Route>
+        <Route path="/sign-up">
+          <SignUp />
         </Route>
         <Route path="/repository/:id">
           <Repository />
