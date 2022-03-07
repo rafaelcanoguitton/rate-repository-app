@@ -35,7 +35,7 @@ const Keyword = ({ handleChangeKeyword }) => {
     />
   );
 };
-export const RepositoryListContainer = ({ repositories }) => {
+export const RepositoryListContainer = ({ repositories, onEndReach}) => {
   const repositoryNodes = repositories
     ? repositories.edges.map((edge) => edge.node)
     : [];
@@ -45,6 +45,8 @@ export const RepositoryListContainer = ({ repositories }) => {
       ItemSeparatorComponent={ItemSeparator}
       renderItem={renderItem}
       keyExtractor={(item) => item.id}
+      onEndReached={onEndReach}
+      onEndReachedThreshold={0.5}
     />
   );
 };
@@ -53,7 +55,7 @@ const RepositoryList = () => {
   const [direction,setDirection] = useState("DESC");
   const [searchKeyword, setSearchKeyword] = useState("");
   const [value] = useDebounce(searchKeyword, 500);
-  const { repositories } = useRepositories(orderBy,direction,value);
+  const { repositories, fetchMore } = useRepositories(orderBy,direction,value,8,);
   const handleChangeOrderBy = (orderBy) => {
     if (orderBy === "RATING_AVERAGE2") {
       setOrderBy("RATING_AVERAGE");
@@ -66,11 +68,14 @@ const RepositoryList = () => {
   const handleChangeKeyword = (keyword) => {
     setSearchKeyword(keyword);
   };
+  const onEndReach = () => {
+    fetchMore();
+  };
   return (
     <View>
       <Keyword handleChangeKeyword={handleChangeKeyword} />
       <FilterOption handleChangeOrderBy={handleChangeOrderBy} orderBy={orderBy} />
-      <RepositoryListContainer repositories={repositories} />
+      <RepositoryListContainer repositories={repositories} onEndReach={onEndReach}/>
     </View>
   );
 };
