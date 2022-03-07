@@ -3,6 +3,8 @@ import useRepositories from "../hooks/useRepositories";
 import { FlatList, View, StyleSheet } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import RepositoryItem from "./RepositoryItem";
+import { Searchbar } from 'react-native-paper';
+import { useDebounce } from "use-debounce";
 const styles = StyleSheet.create({
   separator: {
     height: 10,
@@ -16,12 +18,21 @@ const FilterOption = ({ handleChangeOrderBy, orderBy }) => {
     <Picker
       selectedValue={orderBy}//bold text
       style={{ height: 50, width: "100%", padding: 10, marginTop: 10, fontWeight: "bold" }}
-      onValueChange={(itemValue, itemIndex) => handleChangeOrderBy(itemValue)}
+      onValueChange={(itemValue) => handleChangeOrderBy(itemValue)}
     >
       <Picker.Item label="Latest Repositories" value="CREATED_AT" />
       <Picker.Item label="Highest rated Repositories" value="RATING_AVERAGE" />
       <Picker.Item label="Lowest rated Repositories" value="RATING_AVERAGE2" />
     </Picker>
+  );
+};
+const Keyword = ({ handleChangeKeyword }) => {
+  return (
+    <Searchbar
+      placeholder="Search"
+      onChangeText={(keyword) => handleChangeKeyword(keyword)}
+      
+    />
   );
 };
 export const RepositoryListContainer = ({ repositories }) => {
@@ -40,7 +51,9 @@ export const RepositoryListContainer = ({ repositories }) => {
 const RepositoryList = () => {
   const [orderBy, setOrderBy] = useState("CREATED_AT");
   const [direction,setDirection] = useState("DESC");
-  const { repositories } = useRepositories(orderBy,direction);
+  const [searchKeyword, setSearchKeyword] = useState("");
+  const [value] = useDebounce(searchKeyword, 500);
+  const { repositories } = useRepositories(orderBy,direction,value);
   const handleChangeOrderBy = (orderBy) => {
     if (orderBy === "RATING_AVERAGE2") {
       setOrderBy("RATING_AVERAGE");
@@ -50,8 +63,12 @@ const RepositoryList = () => {
       setDirection("DESC");
     }
   };
+  const handleChangeKeyword = (keyword) => {
+    setSearchKeyword(keyword);
+  };
   return (
     <View>
+      <Keyword handleChangeKeyword={handleChangeKeyword} />
       <FilterOption handleChangeOrderBy={handleChangeOrderBy} orderBy={orderBy} />
       <RepositoryListContainer repositories={repositories} />
     </View>
