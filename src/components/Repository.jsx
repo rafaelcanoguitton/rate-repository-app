@@ -158,7 +158,7 @@ const RepositoryItem = ({ repository }) => {
     </View>
   );
 };
-const ReviewItem = ({ review }) => {
+export const ReviewItem = ({ review }) => {
   //display user, rating, date and comment
   if (!review) {
     return null;

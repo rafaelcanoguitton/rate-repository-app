@@ -1,8 +1,20 @@
 import { gql } from "@apollo/client";
 
 export const GET_REPOSITORIES = gql`
-  query ($orderBy: AllRepositoriesOrderBy!, $orderDirection: OrderDirection!,$searchKeyword: String!,$first: Int!, $after: String) {
-    repositories (orderBy: $orderBy, orderDirection: $orderDirection, searchKeyword: $searchKeyword, first: $first, after: $after) {
+  query (
+    $orderBy: AllRepositoriesOrderBy!
+    $orderDirection: OrderDirection!
+    $searchKeyword: String!
+    $first: Int!
+    $after: String
+  ) {
+    repositories(
+      orderBy: $orderBy
+      orderDirection: $orderDirection
+      searchKeyword: $searchKeyword
+      first: $first
+      after: $after
+    ) {
       edges {
         node {
           id
@@ -17,7 +29,7 @@ export const GET_REPOSITORIES = gql`
         }
         cursor
       }
-      pageInfo{
+      pageInfo {
         endCursor
         startCursor
         hasNextPage
@@ -46,7 +58,7 @@ export const GET_REPO = gql`
       forksCount
       reviewCount
       ratingAverage
-      reviews (first: $first, after: $after) {
+      reviews(first: $first, after: $after) {
         edges {
           node {
             id
@@ -60,7 +72,35 @@ export const GET_REPO = gql`
           }
           cursor
         }
-        pageInfo{
+        pageInfo {
+          endCursor
+          startCursor
+          hasNextPage
+        }
+      }
+    }
+  }
+`;
+export const GET_CURRENT_USER = gql`
+  query getCurrentUser {
+    authorizedUser {
+      id
+      username
+      reviews {
+        edges {
+          node {
+            id
+            text
+            rating
+            createdAt
+            user {
+              id
+              username
+            }
+          }
+          cursor
+        }
+        pageInfo {
           endCursor
           startCursor
           hasNextPage

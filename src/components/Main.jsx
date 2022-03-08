@@ -7,6 +7,7 @@ import SignIn from "./SignIn";
 import SignUp from "./SignUp";
 import { Route, Switch, Redirect } from "react-router-native";
 import Review from "./Review";
+import MyReviews from "./MyReviews";
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
@@ -33,6 +34,9 @@ const Main = () => {
         </Route>
         <Route path="/review">
           <Review />
+        </Route>
+        <Route path="/my-reviews">
+          <MyReviews />
         </Route>
         <Redirect to="/" />
       </Switch>

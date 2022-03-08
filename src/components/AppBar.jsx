@@ -5,6 +5,7 @@ import Constants from "expo-constants";
 import { useQuery, useApolloClient } from "@apollo/client";
 import { AUTHORIZED_USER } from "../graphql/queries";
 import useAuthStorage from "../hooks/useAuthStorage";
+import { useHistory } from "react-router-native";
 const styles = StyleSheet.create({
   container: {
     paddingTop: Constants.statusBarHeight,
@@ -23,7 +24,9 @@ const AppBar = () => {
   const { data } = useQuery(AUTHORIZED_USER);
   const apolloClient = useApolloClient();
   const authStorage = useAuthStorage();
+  const history = useHistory();
   const SignOut = async () => {
+    await history.push("/");
     await authStorage.removeAccessToken();
     await apolloClient.resetStore();
   };
@@ -56,6 +59,11 @@ const AppBar = () => {
             <Pressable>
               <Link to="/review">
                 <Text style={styles.text}>Review</Text>
+              </Link>
+            </Pressable>
+            <Pressable>
+              <Link to="/my-reviews">
+                <Text style={styles.text}>My Reviews</Text>
               </Link>
             </Pressable>
           </>
