@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
     borderColor: "#0366d6",
     borderWidth: 2,
     //position in the upper left corner
-    
+
     top: -40,
     left: -5,
   },
@@ -109,6 +109,9 @@ const styles = StyleSheet.create({
   },
 });
 const RepositoryItem = ({ repository }) => {
+  if (!repository) {
+    return null;
+  }
   const openLink = () => {
     console.log(repository.url);
     Linking.openURL(repository.url);
@@ -157,6 +160,9 @@ const RepositoryItem = ({ repository }) => {
 };
 const ReviewItem = ({ review }) => {
   //display user, rating, date and comment
+  if (!review) {
+    return null;
+  }
   return (
     <View style={styles.container}>
       <View style={styles.ratingCircle}>
@@ -172,14 +178,10 @@ const ReviewItem = ({ review }) => {
 };
 const Repository = () => {
   const { id } = useParams();
-  const { repository } = useRepository({ id: id });
-  if (!repository) {
-    return (
-      <View>
-        <Text>Loading...</Text>
-      </View>
-    );
-  }
+  const { repository, fetchMore } = useRepository({id:id,first:4});
+  const onEndReached = () => {
+    fetchMore();
+  };
   const reviews = repository
     ? repository.reviews.edges.map((edge) => edge.node)
     : [];
@@ -190,6 +192,7 @@ const Repository = () => {
       keyExtractor={(item) => item.id}
       ListHeaderComponent={() => <RepositoryItem repository={repository} />}
       ItemSeparatorComponent={() => <ItemSeparator />}
+      onEndReached={onEndReached}
     />
   );
 };
