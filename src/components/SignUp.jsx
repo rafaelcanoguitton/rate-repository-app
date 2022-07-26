@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
   },
   button: {
     padding: 20,
-    marginBottom: 10,
+    marginBottom: 10, 
     alignItems: "center",
     backgroundColor: "#0366d6",
     borderRadius: 5,
@@ -97,7 +97,7 @@ const SignUpForm = ({ onSubmit }) => {
         testID="confirmPassword"
       />
       <Pressable onPress={onSubmit} style={styles.button} testID="submitButton">
-        <Text style={styles.buttonText}>Sign Up</Text>
+        <Text style={styles.buttonText}>Sign Up</Text> 
       </Pressable>
     </View>
   );
